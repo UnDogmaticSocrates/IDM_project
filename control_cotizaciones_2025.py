@@ -13,6 +13,6 @@ dfs = {hoja: xls.parse(hoja) for hoja in xls.sheet_names}
 df_hoja1 = dfs["2024"]
 print(df_hoja1.info())
 print()
-print(df_hoja1.head())
+print(df_hoja1.head(10))
 print()
 print(df_hoja1.describe())
