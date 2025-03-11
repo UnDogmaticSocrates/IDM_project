@@ -20,7 +20,7 @@ for archivo in os.listdir(carpeta_cotizaciones):
 
         # 🔎 Extraer datos según las coordenadas que mencionaste
         empresa = sheet["B3"].value if sheet["B3"].value else "No encontrado"
-        requisitor = sheet["I9"].value if sheet["I9"].value else "No encontrado"
+        requisitor = sheet["B5"].value if sheet["B5"].value else "No encontrado"
         descripcion = sheet["B15"].value if sheet["B15"].value else "No encontrado"
         no_cotizacion = sheet["K5"].value if sheet["K5"].value else "No encontrado"
         cantidad = sheet["H15"].value if sheet["H15"].value else "No encontrado"
