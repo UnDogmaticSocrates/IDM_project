@@ -8,7 +8,7 @@ archivo_base = "control_de_facturacion_2025.xlsx"
 if os.path.exists(archivo_base):
     df_base = pd.read_excel(archivo_base, engine="openpyxl")
 else:
-    df_base = pd.DataFrame(columns=["Archivo", "Empresa", "Requisitor", "No. Cotización", "Cantidad", "Descripción"])
+    df_base = pd.DataFrame(columns=["Archivo", "Empresa", "Requisitor", "No. Cotización", "Cantidad", "Descripción", "Po", "Fecha de Po", "Precio Unitario", "Subtotal", "IVA", "Total", "Tipo de moneda"])
 
 # Iterar sobre todos los archivos en la carpeta
 for archivo in os.listdir(carpeta_cotizaciones):
@@ -19,11 +19,25 @@ for archivo in os.listdir(carpeta_cotizaciones):
         sheet = wb["Cotización"]  # Ajusta el nombre de la hoja si es diferente
 
         # 🔎 Extraer datos según las coordenadas que mencionaste
-        empresa = sheet["H2"].value if sheet["H2"].value else "No encontrado"
+        empresa = sheet["B3"].value if sheet["B3"].value else "No encontrado"
         requisitor = sheet["I9"].value if sheet["I9"].value else "No encontrado"
-        no_cotizacion = sheet["E9"].value if sheet["E9"].value else "No encontrado"
-        cantidad = sheet["H14"].value if sheet["H14"].value else "No encontrado"
-        descripcion = sheet["A14"].value if sheet["A14"].value else "No encontrado"
+        descripcion = sheet["B15"].value if sheet["B15"].value else "No encontrado"
+        no_cotizacion = sheet["K5"].value if sheet["K5"].value else "No encontrado"
+        cantidad = sheet["H15"].value if sheet["H15"].value else "No encontrado"
+        po = sheet["K3"].value if sheet["K3"].value else "No encontrado"
+        fecha_po = sheet["K4"].value if sheet["K4"].value else "No encontrado"
+        precio_unidad = sheet["J15"].value if sheet["J15"].value else "No encontrado"
+        subtotal = sheet["L36"].value if sheet["L36"].value else "No encontrado"
+        total = sheet["L38"].value if sheet["L38"].value else "No encontrado"
+        iva = sheet["L37"].value if sheet["L37"].value else "No encontrado"
+
+
+
+
+
+
+
+        
 
         nueva_fila = pd.DataFrame([[archivo, empresa, requisitor, no_cotizacion, cantidad, descripcion]], 
                                   columns=["Archivo", "Empresa", "Requisitor", "No. Cotización", "Cantidad", "Descripción"])
