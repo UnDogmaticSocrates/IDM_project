@@ -18,7 +18,7 @@ for archivo in os.listdir(carpeta_cotizaciones):
 
         try:
             wb = openpyxl.load_workbook(ruta_archivo, data_only=True)
-            sheet = wb["Cotizacion"]  # Ajusta el nombre de la hoja si es diferente
+            sheet = wb["cotizacion"]  # Ajusta el nombre de la hoja si es diferente
 
             # Datos generales (se mantienen iguales para todas las filas de un mismo archivo)
             po = sheet["K3"].value if sheet["K3"].value else "No encontrado"
