@@ -3,7 +3,7 @@ import openpyxl
 import os
 
 # Ruta de carpeta
-carpeta_cotizaciones = r"C:\Users\Public\IDM_project-main\folder_test"
+carpeta_cotizaciones = "/workspaces/IDM_project/folder_test"
 archivo_base = "control_de_facturacion_2025.xlsx"
 
 # Cargar base de datos o crear una nueva si no existe
@@ -36,7 +36,6 @@ for archivo in os.listdir(carpeta_cotizaciones):
             descripcion = sheet[f"B{fila}"].value
             cantidad = sheet[f"H{fila}"].value
             precio_unidad = sheet[f"J{fila}"].value
-            tipo_moneda = sheet[f"K{fila}"].value
 
             # Si la celda de descripción está vacía, terminamos el bucle
             if not descripcion:
