@@ -18,7 +18,7 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
             print(f"📂 Procesando: {archivo}")
             try:
                 wb = openpyxl.load_workbook(ruta_archivo, data_only=True)
-                sheet = wb["Cotizacion"]
+                sheet = wb["cotizacion"]
 
                 # Leer datos
                 po = sheet["K3"].value or "No encontrado"
@@ -45,9 +45,8 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                                                 descripcion, po, fecha_po, precio_unidad, 
                                                 subtotal, iva, total, tipo_moneda]], 
                                               columns=df_base.columns)
-                    df_base = pd.concat([df_base, nueva_fila], ignore_index=True)
+                    if not ((df_base["Archivo"] == archivo) & (df_base["No. Cotización"] == no_cotizacion) &  (df_base["Descripción"] == descripcion) & (df_base["Cantidad"] == cantidad)).any():df_base = pd.concat([df_base, nueva_fila], ignore_index=True)
                     fila += 1
-
                 wb.close()
             except Exception as e:
                 print(f"⚠️ Error en {archivo}: {e}")
