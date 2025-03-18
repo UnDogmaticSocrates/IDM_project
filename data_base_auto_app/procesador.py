@@ -21,25 +21,22 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                 sheet = wb["cotizacion"]
 
                 # Leer datos
-                po = sheet["K3"].value or "No encontrado"
-                fecha_po = sheet["L4"].value or "No encontrado"
-                no_cotizacion = sheet["K5"].value or "No encontrado"
-                empresa = sheet["B3"].value or "No encontrado"
-                requisitor = sheet["B5"].value or "No encontrado"
-                subtotal = sheet["L36"].value or "No encontrado"
-                iva = sheet["L37"].value or "No encontrado"
-                total = sheet["L38"].value or "No encontrado"
+                po = sheet["B6"].value or "No encontrado"
+                fecha_po = sheet["A6"].value or "No encontrado"
+                no_cotizacion = sheet["G6"].value or "No encontrado"
+                empresa = sheet["C6"].value or "No encontrado"
+                requisitor = sheet["H6"].value or "No encontrado"
+                subtotal = sheet["H33"].value or "No encontrado"
+                iva = sheet["H36"].value or "No encontrado"
+                total = sheet["H37"].value or "No encontrado"
 
                 # Recorrer materiales
-                fila = 15
-                while True:
+                fila = 9
+                while fila >= 32:
                     descripcion = sheet[f"B{fila}"].value
                     cantidad = sheet[f"H{fila}"].value
                     precio_unidad = sheet[f"J{fila}"].value
                     tipo_moneda = sheet[f"K{fila}"].value
-
-                    if not descripcion or str(descripcion).strip() == "":
-                        break  
 
                     nueva_fila = pd.DataFrame([[archivo, empresa, requisitor, no_cotizacion, cantidad, 
                                                 descripcion, po, fecha_po, precio_unidad, 
