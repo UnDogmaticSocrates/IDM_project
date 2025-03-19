@@ -18,9 +18,10 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
             print(f"📂 Procesando: {archivo}")
 
             try:
-                with openpyxl.load_workbook(ruta_archivo, data_only=True) as wb:
+                    wb = openpyxl.load_workbook(ruta_archivo, data_only=True)
                     if "cotizacion" not in wb.sheetnames:
                         print(f"⚠️ {archivo} no contiene la hoja 'cotizacion'.")
+                        wb.close()
                         continue
 
                     sheet = wb["cotizacion"]
