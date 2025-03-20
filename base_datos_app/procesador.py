@@ -30,7 +30,7 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
         df_base = pd.read_excel(archivo_base, engine="openpyxl")
     else:
         df_base = pd.DataFrame(columns=["Archivo", "Empresa", "Requisitor", "No. Cotización", "Po", "Fecha de Po", "Descripción", 
-                                        "Cantidad", "Precio Unitario", "Importe", "Subtotal", "IVA", "Total", "Tipo de moneda"])
+                                        "Cantidad", "Precio Unitario", "Importe", "Subtotal", "IVA", "Total", "Tipo de moneda", "Responsable de facturación", "Razón social"])
 
     # Iterar sobre archivos en la carpeta
     for archivo in os.listdir(carpeta_cotizaciones):
@@ -46,7 +46,6 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
 
                         continue
                     df_excel = pd.read_excel(ruta_archivo, sheet_name="cotizacion", engine="openpyxl")
-                    print(df_excel.head(30))
 
                     sheet = wb["cotizacion"]
 
@@ -60,6 +59,8 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                     subtotal = sheet["H33"].value or "No encontrado"
                     iva = sheet["H36"].value or "No encontrado"
                     total = sheet["H37"].value or "No encontrado"
+                    rfc = sheet["F2"].value or "No encontrado"
+                    facturado = sheet["F3"].value or "No encontrado"
                     # Recorrer materiales
                     fila = 9
                     nuevas_filas = []
@@ -75,11 +76,10 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                         # Si la descripción está vacía, se ignora, pero no se detiene
                         if descripcion:
                             nuevas_filas.append([archivo, empresa, requisitor, no_cotizacion, po, fecha_po, descripcion, 
-                                        cantidad, precio_unidad, importe, subtotal, iva, total, tipo_moneda])
+                                        cantidad, precio_unidad, importe, subtotal, iva, total, tipo_moneda, facturado, rfc])
                         fila += 1  # Seguir iterando hasta la fila 32
 
                     # Crear DataFrame con nuevas filas
-                    print(f"📊 Nuevas filas extraídas: {len(nuevas_filas)}")
                     df_nuevo = pd.DataFrame(nuevas_filas, columns=df_base.columns)
                     if df_nuevo.empty:
                         print("⚠️ Advertencia: No se encontraron nuevas filas en este archivo.")
@@ -89,7 +89,6 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
             except Exception as e:
                 print(f"⚠️ Error en {archivo}: {e}")
 
-    print(f"📊 Tamaño del DataFrame antes de guardar: {df_base.shape}")
 
     # Guardar archivo actualizado
     df_base.to_excel(archivo_base, index=False, engine="openpyxl")

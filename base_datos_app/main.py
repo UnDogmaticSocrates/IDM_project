@@ -2,7 +2,7 @@ import json
 from procesador import procesar_archivos
 
 # Cargar configuración
-with open("/workspaces/IDM_project/data_base_auto_app/config.json", "r") as file:
+with open("/workspaces/IDM_project/base_datos_app/config.json", "r") as file:
     config = json.load(file)
 
 # Ejecutar procesamiento
