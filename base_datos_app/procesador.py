@@ -49,15 +49,7 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                     print(df_excel.head(30))
 
                     sheet = wb["cotizacion"]
-                    print(f"🔎 PO: {sheet['B6'].value}")
-                    print(f"🔎 Fecha PO: {sheet['A6'].value}")
-                    print(f"🔎 No. Cotización: {sheet['G6'].value}")
-                    print(f"🔎 Empresa: {sheet['C6'].value}")
-                    print(f"🔎 Requisitor: {sheet['H6'].value}")
-                    print(f"🔎 Subtotal: {sheet['H33'].value}")
-                    print(f"🔎 IVA: {sheet['H36'].value}")
-                    print(f"🔎 Total: {sheet['H37'].value}")
-                    print(f"🔎 Importe: {sheet['H9'].value}")
+
                     # Leer datos generales
                     po = sheet["B6"].value or "No encontrado"
                     fecha_po = obtener_fecha(sheet, "A6") or "No encontrado"
@@ -68,7 +60,6 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                     subtotal = sheet["H33"].value or "No encontrado"
                     iva = sheet["H36"].value or "No encontrado"
                     total = sheet["H37"].value or "No encontrado"
-                    print (f"La fecha de po deberia ser: {fecha_po}")
                     # Recorrer materiales
                     fila = 9
                     nuevas_filas = []
@@ -80,7 +71,6 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                         importe = sheet[f"H{fila}"].value
                         tipo_moneda = sheet[f"I{fila}"].value
 
-                        print(f"🔎 Fila {fila}: {descripcion}, {cantidad}, {precio_unidad}, {tipo_moneda}")  # Debug
 
                         # Si la descripción está vacía, se ignora, pero no se detiene
                         if descripcion:
