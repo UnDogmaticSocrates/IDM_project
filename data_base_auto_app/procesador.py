@@ -1,6 +1,28 @@
 import pandas as pd
 import os
 import openpyxl
+from openpyxl.utils.datetime import from_excel
+from datetime import datetime, timedelta
+
+
+def obtener_fecha(sheet, celda):
+    valor = sheet[celda].value
+
+    if isinstance(valor, (int, float)):  # Si es un número, convertirlo
+        fecha_convertida = datetime(1899, 12, 30) + timedelta(days=valor)
+        return fecha_convertida.strftime("%Y-%m-%d")  # Devuelve la fecha en formato legible
+
+    elif isinstance(valor, datetime):  # Si ya es datetime, devolverlo formateado
+        return valor.strftime("%Y-%m-%d")
+
+    elif isinstance(valor, str):  # Si está guardado como texto, intenta parsearlo
+        try:
+            fecha_parseada = datetime.strptime(valor, "%m-%d-%Y")  # Ajusta formato si es necesario
+            return fecha_parseada.strftime("%Y-%m-%d")
+        except ValueError:
+            return f"⚠️ No se pudo convertir: {valor}"
+
+    return "No encontrado"  # Si está vacío
 
 def procesar_archivos(carpeta_cotizaciones, archivo_base):
     # Cargar base de datos o crear nueva
@@ -8,7 +30,7 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
         df_base = pd.read_excel(archivo_base, engine="openpyxl")
     else:
         df_base = pd.DataFrame(columns=["Archivo", "Empresa", "Requisitor", "No. Cotización", "Po", "Fecha de Po", "Descripción", 
-                                        "Cantidad", "Precio Unitario", "Subtotal", "IVA", "Total", "Tipo de moneda"])
+                                        "Cantidad", "Precio Unitario", "Importe", "Subtotal", "IVA", "Total", "Tipo de moneda"])
 
     # Iterar sobre archivos en la carpeta
     for archivo in os.listdir(carpeta_cotizaciones):
@@ -17,7 +39,7 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
             print(f"📂 Procesando: {archivo}")
 
             try:
-                    wb = openpyxl.load_workbook(ruta_archivo, data_only=True)
+                    wb = openpyxl.load_workbook(ruta_archivo, data_only= True)
                     if "cotizacion" not in wb.sheetnames:
                         print(f"⚠️ {archivo} no contiene la hoja 'cotizacion'.")
                        
@@ -35,20 +57,18 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                     print(f"🔎 Subtotal: {sheet['H33'].value}")
                     print(f"🔎 IVA: {sheet['H36'].value}")
                     print(f"🔎 Total: {sheet['H37'].value}")
+                    print(f"🔎 Importe: {sheet['H9'].value}")
                     # Leer datos generales
                     po = sheet["B6"].value or "No encontrado"
-                    fecha_po = sheet["A6"].value or "No encontrado"
+                    fecha_po = obtener_fecha(sheet, "A6") or "No encontrado"
                     no_cotizacion = sheet["G6"].value or "No encontrado"
                     empresa = sheet["C6"].value or "No encontrado"
                     requisitor = sheet["H6"].value or "No encontrado"
+                    importe = sheet["H9"].value or "No encontrado"
                     subtotal = sheet["H33"].value or "No encontrado"
                     iva = sheet["H36"].value or "No encontrado"
                     total = sheet["H37"].value or "No encontrado"
-
-                    for fila in range(6, 15):  # Ajusta el rango según el archivo
-                          valores_fila = [sheet[f"{col}{fila}"].value for col in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"]
-                          print(f"Fila {fila}: {valores_fila}")
-
+                    print (f"La fecha de po deberia ser: {fecha_po}")
                     # Recorrer materiales
                     fila = 9
                     nuevas_filas = []
@@ -65,7 +85,7 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
                         # Si la descripción está vacía, se ignora, pero no se detiene
                         if descripcion:
                             nuevas_filas.append([archivo, empresa, requisitor, no_cotizacion, po, fecha_po, descripcion, 
-                                        cantidad, precio_unidad, subtotal, iva, total, tipo_moneda])
+                                        cantidad, precio_unidad, importe, subtotal, iva, total, tipo_moneda])
                         fila += 1  # Seguir iterando hasta la fila 32
 
                     # Crear DataFrame con nuevas filas
