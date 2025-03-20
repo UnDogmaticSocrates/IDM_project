@@ -7,9 +7,8 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
     if os.path.exists(archivo_base):
         df_base = pd.read_excel(archivo_base, engine="openpyxl")
     else:
-        df_base = pd.DataFrame(columns=["Archivo", "Empresa", "Requisitor", "No. Cotización", 
-                                        "Cantidad", "Descripción", "Po", "Fecha de Po", 
-                                        "Precio Unitario", "Subtotal", "IVA", "Total", "Tipo de moneda"])
+        df_base = pd.DataFrame(columns=["Archivo", "Empresa", "Requisitor", "No. Cotización", "Po", "Fecha de Po", "Descripción", 
+                                        "Cantidad", "Precio Unitario", "Subtotal", "IVA", "Total", "Tipo de moneda"])
 
     # Iterar sobre archivos en la carpeta
     for archivo in os.listdir(carpeta_cotizaciones):
@@ -65,9 +64,8 @@ def procesar_archivos(carpeta_cotizaciones, archivo_base):
 
                         # Si la descripción está vacía, se ignora, pero no se detiene
                         if descripcion:
-                            nuevas_filas.append([archivo, empresa, requisitor, no_cotizacion, cantidad, 
-                                                 descripcion, po, fecha_po, precio_unidad, 
-                                                 subtotal, iva, total, tipo_moneda])
+                            nuevas_filas.append([archivo, empresa, requisitor, no_cotizacion, po, fecha_po, descripcion, 
+                                        cantidad, precio_unidad, subtotal, iva, total, tipo_moneda])
                         fila += 1  # Seguir iterando hasta la fila 32
 
                     # Crear DataFrame con nuevas filas
